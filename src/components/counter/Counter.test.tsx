@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { Counter } from './Counter'
 import user from '@testing-library/user-event'
+import { act } from 'react-dom/test-utils';
 
 describe('Counter', () => {
   test('renders correctly', () => {
@@ -25,7 +26,10 @@ describe('Counter', () => {
     user.setup()
     render(<Counter />)
     const incrementButton = screen.getByRole('button', { name: 'Increment' })
-    await user.click(incrementButton)
+    await act(async () => {
+      await user.click(incrementButton);
+    });
+
     const countElement = screen.getByRole('heading')
     expect(countElement).toHaveTextContent('1')
   })
@@ -34,8 +38,16 @@ describe('Counter', () => {
     user.setup()
     render(<Counter />)
     const incrementButton = screen.getByRole('button', { name: 'Increment' })
-    await user.click(incrementButton)
-    await user.click(incrementButton)
+
+    await act(async () =>{
+      await user.click(incrementButton)
+      
+    })
+    
+    await act(async () =>{
+      await user.click(incrementButton)
+      
+    })
     const countElement = screen.getByRole('heading')
     expect(countElement).toHaveTextContent('2')
   })
@@ -44,10 +56,19 @@ describe('Counter', () => {
     user.setup()
     render(<Counter />)
     const amountInput = screen.getByRole('spinbutton')
-    await user.type(amountInput, '10')
+
+    await act(async () =>{
+      await user.type(amountInput, '10')
+      
+    })
+
+    
     expect(amountInput).toHaveValue(10)
     const setButton = screen.getByRole('button', { name: 'Set' })
-    await user.click(setButton)
+    await act(async () =>{
+      await user.click(setButton)
+      
+    })
     const countElement = screen.getByRole('heading')
     expect(countElement).toHaveTextContent('10')
   })
